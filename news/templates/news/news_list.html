@@ -1,0 +1,54 @@
+{% extends 'default.html' %}
+
+{% block title %}Все новости{% endblock %}
+
+{% block content %}
+
+<h1>Все новости</h1>
+
+{# Фильтр length показывает количество новостей #}
+<p><strong>Всего новостей: {{ news_list|length }}</strong></p>
+
+{% if news_list %}
+    {# Вариант 1: Списком (как сейчас) #}
+    <ul>
+    {% for item in news_list %}
+        <li style="margin-bottom: 20px;">
+            <h2>
+                <a href="/news/{{ item.id }}/">{{ item.title }}</a>
+            </h2>
+            {# Формат день.месяц.год — убираем часы и минуты #}
+            <p><strong>Дата:</strong> {{ item.created_at|date:"d.m.Y" }}</p>
+            <p><strong>Первые 20 слов:</strong> {{ item.text|truncatewords:20 }}</p>
+            <hr>
+        </li>
+    {% endfor %}
+    </ul>
+
+    {# Вариант 2: Таблицей (раскомментируйте, если хотите таблицу вместо списка) #}
+    {#
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th>Заголовок</th>
+                <th>Дата публикации</th>
+                <th>Первые 20 слов</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in news_list %}
+            <tr>
+                <td><a href="/news/{{ item.id }}/">{{ item.title }}</a></td>
+                <td>{{ item.created_at|date:"d.m.Y" }}</td>
+                <td>{{ item.text|truncatewords:20 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    #}
+
+{% else %}
+    <p>Новостей пока нет.</p>
+{% endif %}
+
+{% endblock %}
